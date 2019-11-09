@@ -18,7 +18,7 @@ Additional Features:
 To build this wallpaper tool, I'll be likely need to develop a few sets of tools deploying 3rd-party modules:
 - OS Interactions: os, sys
 - GUI:
-    - Desktop: tkinter, PySide2, and PySimpleGUI
-    - Web App like Flask/Django (Not familiar with web tools, so leaning towards a desktop GUI)
+    - Desktop: tkinter, PySide2, or PySimpleGUI
+    - Web App: Flask or Django (Not familiar with web tools, so leaning towards a desktop GUI)
 - WebScraping: requests and BeautifulSoup
 - Machine Learning: sci-kit learn
