@@ -21,4 +21,5 @@ To build this wallpaper tool, I'll be likely need to develop a few sets of tools
     - Desktop: tkinter, PySide2, or PySimpleGUI
     - Web App: Flask or Django (Not familiar with web tools, so leaning towards a desktop GUI)
 - WebScraping: requests and BeautifulSoup
+- Image Processing: OpenCV
 - Machine Learning: sci-kit learn
