@@ -1,9 +1,10 @@
-import requests
-import json
 from threading import Thread
 from praw import Reddit
 from praw.models.reddit.submission import Submission
 from . import utils
+import queue
+import requests
+import json
 
 
 class RedWallpaperScraper:
@@ -73,7 +74,7 @@ class RedWallpaperScraper:
         Time filters: 'week' (default), 'all', 'day', 'hour', 'month', 'year'
         Limit: Scrapes up to 1000 (max) submissions, 300 by default
         """
-        self.wallpapers = []
+        self.wallpapers = queue.Queue()
         self.loaded = False
         
         with Reddit(**self.reddit_oath) as R:
@@ -88,18 +89,24 @@ class RedWallpaperScraper:
                 r_wallpapers = getattr(r_wallpapers, sort)(limit=limit)
 
             Thread(target=self._get_all_wallpaper_url, args=(r_wallpapers,)).start()
-                
-    
-    def __getitem__(self, key):
-        return self.wallpapers[key]
 
                 
     def __iter__(self):
-        return iter(self.wallpapers)
+        return self
+    
+    
+    def __next__(self):
+        try:
+            return self.wallpapers.get(block=False)
+        except queue.Empty:
+            if self.loaded:
+                raise StopIteration('No more wallpapers')
+            else:
+                return self.wallpapers.get(block=True)
     
     
     def __len__(self):
-        return len(self.wallpapers)
+        return self.wallpapers.qsize()
     
     
     def __bool__(self):
@@ -113,9 +120,10 @@ class RedWallpaperScraper:
         """
         if isinstance(r_submission, Submission):
             if utils.is_img_ext(r_submission.url):
-                self.wallpapers.append((r_submission.url, r_submission.thumbnail))
+                self.wallpapers.put((r_submission.url, r_submission.thumbnail))
             elif 'imgur' in r_submission.url[:15]: # No need to search entire string
-                self.wallpapers.extend([(url, None) for url in self.get_imgur(r_submission.url)])
+                for imgur_post in [(url, None) for url in self.get_imgur(r_submission.url)]:
+                    self.wallpapers.put(imgur_post)
     
     
     def _get_all_wallpaper_url(self, r_wallpapers):
