@@ -91,7 +91,10 @@ e.g. Pick colors via the GUI, preview images, and have a better overall UI
 experience. I would love to include more high-res image feeds beyond Reddit.
 I wanted to create this as an app that one would be able to run with just
 'python redwallpaper' from the CLI, but I didn't have the time to nail down
-the overall package hierarchy/structuring. I had also intended to allow users
+the overall package hierarchy/structuring. This is very apparent in the
+'tests.py' file, where it fails to find the test image. Whereas, the test
+script ran perfectly fine when I was developing it in a Jupyter notebook
+outside the redwallpaper directory. I had also intended to allow users
 to pick colors from an actual palette, but reconsidered with limited time.
 And if I still had more time, I'd refactor the entire project
 (lol, but actually).
