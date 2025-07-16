@@ -1,6 +1,10 @@
 import os
 import platform
-import appscript
+import subprocess
+try:
+    import appscript
+except Exception:  # pragma: no cover - optional dependency
+    appscript = None
 import ctypes
 
 
@@ -25,12 +29,20 @@ def set_wallpaper(filepath):
         os.system(set_cmd)
 
     elif plt == 'Darwin':
-        # For setting the desktops of multiple monitors
-        se = appscript.app('System Events')
-        desktops = se.desktops.display_name.get()
-        for d in desktops:
-            desk = se.desktops[appscript.its.display_name == d]
-            desk.picture.set(appscript.mactypes.File(filepath))
+        if appscript is not None:
+            # For setting the desktops of multiple monitors
+            se = appscript.app('System Events')
+            desktops = se.desktops.display_name.get()
+            for d in desktops:
+                desk = se.desktops[appscript.its.display_name == d]
+                desk.picture.set(appscript.mactypes.File(filepath))
+        else:
+            # Fallback to AppleScript via osascript
+            script = (
+                'tell application "System Events" to ' \
+                'tell every desktop to set picture to POSIX file "{}"'
+            ).format(filepath)
+            subprocess.run(['osascript', '-e', script], check=True)
 
     else:
         raise UnidentifiedSystem

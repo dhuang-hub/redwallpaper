@@ -158,3 +158,4 @@ And if I still had more time, I'd refactor the entire project
 
 I hope you enjoy testing this (I pray this works on Windows/Linux), and
 I hope you find a new and interesting desktop wallpaper!
+

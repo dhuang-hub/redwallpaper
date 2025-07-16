@@ -23,3 +23,4 @@ To build this wallpaper tool, I'll be likely need to develop a few sets of tools
 - WebScraping: requests and BeautifulSoup
 - Image Processing: OpenCV
 - Machine Learning: sci-kit learn
+
