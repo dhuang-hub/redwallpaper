@@ -1,6 +1,9 @@
 import os
 import platform
-import appscript
+try:
+    import appscript
+except Exception:  # pragma: no cover - optional dependency
+    appscript = None
 import ctypes
 
 
@@ -25,6 +28,8 @@ def set_wallpaper(filepath):
         os.system(set_cmd)
 
     elif plt == 'Darwin':
+        if appscript is None:
+            raise ImportError('appscript is required on macOS to set wallpapers')
         # For setting the desktops of multiple monitors
         se = appscript.app('System Events')
         desktops = se.desktops.display_name.get()

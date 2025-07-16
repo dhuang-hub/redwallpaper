@@ -5,9 +5,13 @@ from .buffer.FullsizeBuffer import FullsizeBuffer
 from .image.RedWallpaperImage import RedWallpaperImage
 from .image import utils
 from .set_wallpaper import set_wallpaper
+import logging
 import os
 import shutil
 import matplotlib.pyplot as plt
+
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 
 class RedWallpaperApp:
@@ -18,7 +22,7 @@ class RedWallpaperApp:
     """
 
     def __init__(self):
-        print('Welcome to Red Wallpaper! Time to find a new desktop wallpaper from /r/wallpapers.')
+        logger.info('Welcome to Red Wallpaper! Time to find a new desktop wallpaper from /r/wallpapers.')
         
         self.master_file = None
         self.master_image = None
@@ -52,7 +56,7 @@ class RedWallpaperApp:
         master_file = None
         master_file = input(console)
         while not (os.path.exists(master_file) and utils.is_img_ext(master_file)):
-            print('Invalid image file, must be a valid .jpg or .png.')
+            logger.warning('Invalid image file, must be a valid .jpg or .png.')
             master_file = input(console)
         self.master_file = master_file
         
@@ -66,7 +70,7 @@ class RedWallpaperApp:
         k = None
         k = input(console)
         while not (k.isdigit() and 0 < int(k) <= 5):
-            print('Invalid number, must be an integer 1 through 5.')
+            logger.warning('Invalid number, must be an integer 1 through 5.')
             k = input(console)
         self.k = int(k)
         
@@ -87,7 +91,7 @@ class RedWallpaperApp:
             decision = input(console).lower()
             
             while decision not in {'y', 'n', 'yes', 'no'}:
-                print('Invalid option!')
+                logger.warning('Invalid option!')
                 decision = input(console).lower()
             plt.close('all')
             if decision[0] == 'y':
@@ -111,7 +115,7 @@ class RedWallpaperApp:
         listing = input(console).lower()
         while listing not in listing_options.keys() \
             and listing not in listing_options.values():
-            print('Invalid selection! Try selecting with just the first character.')
+            logger.warning('Invalid selection! Try selecting with just the first character.')
             listing = input(console).lower()
         self.listing = listing_options[listing[0]]
         
@@ -136,7 +140,7 @@ class RedWallpaperApp:
             time_filter = input(console).lower()
             while time_filter not in time_options.keys() \
                 and time_filter not in time_options.values():
-                print('Invalid selection! Try selecting with just the first character.')
+                logger.warning('Invalid selection! Try selecting with just the first character.')
                 time_filter = input(console).lower()
             self.time_filter = time_options[time_filter[0]]
             
@@ -150,12 +154,12 @@ class RedWallpaperApp:
         while True:
             directory = input(console)
             if not os.path.isdir(directory):
-                print('Invalid directory!')
+                logger.warning('Invalid directory!')
                 continue
             correct = None
             correct = input(f"Is \'{os.path.abspath(directory)}\' correct? (Yes/No): ").lower()
             while correct not in {'y', 'n', 'yes', 'no'}:
-                print('Invalid option!')
+                logger.warning('Invalid option!')
                 correct = input(f"Is \'{directory}\' correct? (Yes/No): ").lower()
             if correct[0] == 'y':
                 break
@@ -203,7 +207,7 @@ Input options:
             user = input(console).lower()
             
             if user not in {'n', 's', 'e'}:
-                print('Invalid option!')
+                logger.warning('Invalid option!')
                 continue
             
             # Next wallpaper
